@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DairyFlow.Business.Interface\DairyFlow.Business.Interfaces.csproj" />
+    <ProjectReference Include="..\DairyFlow.Data.Dtos\DairyFlow.Data.Dtos.csproj" />
+    <ProjectReference Include="..\DairyFlow.Data.Models\DairyFlow.Data.Models.csproj" />
+    <ProjectReference Include="..\DairyFlow.Data.Repository\DairyFlow.Data.Repository.csproj" />
+    <ProjectReference Include="..\DairyFlow.Infrastructure.Commons\DairyFlow.Infrastructure.Commons.csproj" />
+  </ItemGroup>
+
+</Project>

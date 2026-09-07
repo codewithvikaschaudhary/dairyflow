@@ -1,0 +1,6 @@
+@DairyFlow_HostAddress = http://localhost:5100
+
+GET {{DairyFlow_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
