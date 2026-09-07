@@ -18,14 +18,18 @@ namespace DairyFlow.Data.Dtos.ProductsDto
         public int BrandId { get; set; }
         public required string BrandName { get; set; }
         public required string CreatedBy { get; set; }
+        // need to ignore these properties when serializing to JSON, as they are not needed in the response
         [JsonIgnore]
         public string? CreatedByFirstName { get; set; }
+        // need to ignore these properties when serializing to JSON, as they are not needed in the response
         [JsonIgnore]
         public string? CreatedByLastName { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public required string ModifiedBy { get; set; }
+        // need to ignore these properties when serializing to JSON, as they are not needed in the response
         [JsonIgnore]
         public string? ModifiedByFirstName { get; set; }
+        // need to ignore these properties when serializing to JSON, as they are not needed in the response
         [JsonIgnore]
         public string? ModifiedByLastName { get; set; }
         public DateTime ModifiedDate { get; set; } = DateTime.Now;
