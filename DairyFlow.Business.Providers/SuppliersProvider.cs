@@ -122,7 +122,7 @@ namespace DairyFlow.Business.Providers
             supplier.Email = request.Email;
             supplier.Address = request.Address;
             supplier.ModifiedBy = request.ModifiedBy;
-            supplier.ModifiedDate = DateTime.UtcNow;
+            supplier.ModifiedDate = DateTime.Now;
             _suppliersRepository.Update(supplier);
             await _suppliersRepository.SaveChangesAsync();
             return supplier;
