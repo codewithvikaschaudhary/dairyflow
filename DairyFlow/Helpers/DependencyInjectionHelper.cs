@@ -18,6 +18,7 @@ namespace DairyFlow.Helpers
             services.AddScoped(typeof(IProductsProvider), typeof(ProductsProvider));
             services.AddScoped(typeof(IInventoriesProvider), typeof(InventoriesProvider));
             services.AddScoped(typeof(IStockTransactionProvider), typeof(StockTransactionProvider));
+            services.AddScoped(typeof(IUnitsProvider), typeof(UnitsProvider));
         }
 
     }

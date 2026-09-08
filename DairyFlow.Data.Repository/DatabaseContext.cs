@@ -18,6 +18,7 @@ namespace DairyFlow.Data.Repository
         public DbSet<Products> Products { get; set; }
         public DbSet<Inventories> Inventories { get; set; }
         public DbSet<StockTransaction> StockTransaction { get; set; }
+        public DbSet<Units> Units { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
