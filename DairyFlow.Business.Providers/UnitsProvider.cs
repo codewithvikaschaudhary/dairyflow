@@ -27,7 +27,8 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from unit in _unitsRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on unit.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on unit.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on unit.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          where unit.Id == id
                          select new UnitsResponse
                          {
@@ -37,7 +38,7 @@ namespace DairyFlow.Business.Providers
                              CreatedBy = unit.CreatedBy,
                              CreatedByName = createdUser.FirstName,
                              ModifiedBy = unit.ModifiedBy,
-                             ModifiedByName = modifiedUser.FirstName
+                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null
                          });
             var result = query.FirstOrDefault();
             if (result == null)
@@ -52,7 +53,8 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from unit in _unitsRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on unit.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on unit.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on unit.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new UnitsResponse
                          {
                              Id = unit.Id,
@@ -61,7 +63,7 @@ namespace DairyFlow.Business.Providers
                              CreatedBy = unit.CreatedBy,
                              CreatedByName = createdUser.FirstName,
                              ModifiedBy = unit.ModifiedBy,
-                             ModifiedByName = modifiedUser.FirstName
+                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null
                          });
 
             if (filters.Id.HasValue)
