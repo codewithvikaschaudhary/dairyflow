@@ -14,10 +14,10 @@ namespace DairyFlow.Data.Dtos.UnitsDto
         public required string ShortName { get; set; }
         public int CreatedBy { get; set; }
         public required string CreatedByName { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public int? ModifiedBy { get; set; }
         public string? ModifiedByName { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
 
     }
 }
