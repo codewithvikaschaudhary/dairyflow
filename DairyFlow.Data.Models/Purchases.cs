@@ -46,13 +46,13 @@ namespace DairyFlow.Data.Models
         public int CreatedBy { get; set; }
 
         [Column("created_date")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         [Column("modified_by")]
         public int? ModifiedBy { get; set; }
 
         [Column("modified_date")]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
     }
 }

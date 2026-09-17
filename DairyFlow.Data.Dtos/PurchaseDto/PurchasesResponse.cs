@@ -25,7 +25,7 @@ namespace DairyFlow.Data.Dtos.PurchaseDto
         public DateTime CreatedDate { get; set; }
         public int? ModifiedBy { get; set; }
         public string? ModifiedByName { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
     }
 }

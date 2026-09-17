@@ -1,14 +1,15 @@
-﻿using DairyFlow.Data.Models;
+﻿using DairyFlow.Data.Enum;
+using DairyFlow.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Metadata;
+using System; // Add this using directive
 
 namespace DairyFlow.Data.Repository
 {
     public class DatabaseContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
-            : base(options)
+        public DatabaseContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -20,6 +21,7 @@ namespace DairyFlow.Data.Repository
         public DbSet<StockTransaction> StockTransaction { get; set; }
         public DbSet<Units> Units { get; set; }
         public DbSet<Suppliers> Suppliers { get; set; }
+        public DbSet<Purchases> Purchases { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,18 @@ namespace DairyFlow.Data.Repository
             modelBuilder.Entity<StockTransaction>()
                 .Property(x => x.TransactionType)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<Purchases>()
+                .Property(x => x.Status)
+                .HasConversion<string>();
+
+
+            //modelBuilder.Entity<Purchases>()
+            //    .Property(x => x.Status)
+            //    .HasConversion(
+            //        v => v.ToString(),
+            //        v => System.Enum.Parse<PurchaseStatus>(v, true));
+
 
         }
     }
