@@ -22,6 +22,7 @@ namespace DairyFlow.Data.Repository
         public DbSet<Units> Units { get; set; }
         public DbSet<Suppliers> Suppliers { get; set; }
         public DbSet<Purchases> Purchases { get; set; }
+        public DbSet<PurchaseItem> PurchaseItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,14 +36,7 @@ namespace DairyFlow.Data.Repository
                 .Property(x => x.Status)
                 .HasConversion<string>();
 
-
-            //modelBuilder.Entity<Purchases>()
-            //    .Property(x => x.Status)
-            //    .HasConversion(
-            //        v => v.ToString(),
-            //        v => System.Enum.Parse<PurchaseStatus>(v, true));
-
-
         }
+
     }
 }
