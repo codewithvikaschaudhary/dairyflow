@@ -16,6 +16,8 @@ namespace DairyFlow.Data.Dtos.ProductsDto
         public int CategoryId { get; set; }
         public required string CategoryName { get; set; }
         public int BrandId { get; set; }
+        public int UnitId { get; set; }
+
         public required string BrandName { get; set; }
         public required string CreatedBy { get; set; }
         // need to ignore these properties when serializing to JSON, as they are not needed in the response

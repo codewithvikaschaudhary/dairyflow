@@ -40,6 +40,7 @@ namespace DairyFlow.Business.Providers
                              CategoryId = product.CategoryId,
                              CategoryName = category.Name,
                              BrandId = product.BrandId,
+                             UnitId = product.UnitId,
                              BrandName = brand.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
@@ -68,6 +69,7 @@ namespace DairyFlow.Business.Providers
                              CategoryName = category.Name,
                              BrandId = product.BrandId,
                              BrandName = brand.Name,
+                             UnitId = product.UnitId,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedByFirstName = createdUser.FirstName,
                              CreatedByLastName = createdUser.LastName,
@@ -110,6 +112,7 @@ namespace DairyFlow.Business.Providers
                 Name = request.Name,
                 CategoryId = request.CategoryId,
                 BrandId = request.BrandId,
+                UnitId = request.UnitId,
                 CreatedBy = request.CreatedBy,
                 ModifiedBy = request.ModifiedBy,
             };
@@ -127,6 +130,7 @@ namespace DairyFlow.Business.Providers
             products.Name = request.Name;
             products.CategoryId = request.CategoryId;
             products.BrandId = request.BrandId;
+            products.UnitId = request.UnitId;
             products.CreatedBy = request.CreatedBy;
             products.ModifiedBy = request.ModifiedBy;
             _productsRepository.Update(products);

@@ -23,6 +23,9 @@ namespace DairyFlow.Data.Models
         [Column("brand_id")]
         public int BrandId { get; set; }
 
+        [Column("unit_id")]
+        public int UnitId { get; set; }
+
         [Column("created_by")]
         public int CreatedBy { get; set; }
 
