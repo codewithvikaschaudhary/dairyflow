@@ -18,12 +18,14 @@ namespace DairyFlow.Business.Providers
         private readonly IRepository<Categories> _categoriesRepository;
         private readonly IRepository<Brands> _brandsRepository;
         private readonly IRepository<Users> _usersRepository;
-        public ProductsProvider(IRepository<Products> productsRepository, IRepository<Categories> categoriesRepository, IRepository<Brands> brandsRepository, IRepository<Users> usersRepository)
+        private readonly IRepository<Units> _unitsRepository;
+        public ProductsProvider(IRepository<Products> productsRepository, IRepository<Categories> categoriesRepository, IRepository<Brands> brandsRepository, IRepository<Users> usersRepository, IRepository<Units> unitsRepository)
         {
             _productsRepository = productsRepository;
             _categoriesRepository = categoriesRepository;
             _brandsRepository = brandsRepository;
             _usersRepository = usersRepository;
+            _unitsRepository = unitsRepository;
         }
         public ProductsResponse GetProductsById(int id)
         {
@@ -32,6 +34,7 @@ namespace DairyFlow.Business.Providers
                          join brand in _brandsRepository.GetAll() on product.BrandId equals brand.Id
                          join createdUser in _usersRepository.GetAll() on product.CreatedBy equals createdUser.Id
                          join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id
+                         join unit in _unitsRepository.GetAll() on product.UnitId equals unit.Id
                          where product.Id == id
                          select new ProductsResponse
                          {
@@ -39,11 +42,12 @@ namespace DairyFlow.Business.Providers
                              Name = product.Name,
                              CategoryId = product.CategoryId,
                              CategoryName = category.Name,
-                             BrandId = product.BrandId,
-                             UnitId = product.UnitId,
+                             BrandId = product.BrandId,                             
                              BrandName = brand.Name,
-                             CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             UnitId = product.UnitId,
+                             UnitName = unit.Name,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
+                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
                          });
 
             var products = query.FirstOrDefault();
@@ -61,6 +65,7 @@ namespace DairyFlow.Business.Providers
                          join brand in _brandsRepository.GetAll() on product.BrandId equals brand.Id
                          join createdUser in _usersRepository.GetAll() on product.CreatedBy equals createdUser.Id
                          join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id
+                         join unit in _unitsRepository.GetAll() on product.UnitId equals unit.Id
                          select new ProductsResponse
                          {
                              Id = product.Id,
@@ -70,10 +75,11 @@ namespace DairyFlow.Business.Providers
                              BrandId = product.BrandId,
                              BrandName = brand.Name,
                              UnitId = product.UnitId,
-                             CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
+                             UnitName = unit.Name,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedByFirstName = createdUser.FirstName,
                              CreatedByLastName = createdUser.LastName,
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
                              ModifiedByFirstName = modifiedUser.FirstName,
                              ModifiedByLastName = modifiedUser.LastName,
                          });
@@ -103,7 +109,9 @@ namespace DairyFlow.Business.Providers
                 query = query.Where(p => p.ModifiedByFirstName!.Contains(filters.ModifiedBy) || (p.ModifiedByLastName != null && p.ModifiedByLastName!.Contains(filters.ModifiedBy)));
             }
 
-                return query.GetPaginatorResult(filters.PageNumber, filters.PageSize);
+            query = query.OrderBy(p => p.Id);
+
+            return query.GetPaginatorResult(filters.PageNumber, filters.PageSize);
         }
         public async Task<Products> CreateProducts(CreateProductsRequest request)
         {
@@ -114,7 +122,6 @@ namespace DairyFlow.Business.Providers
                 BrandId = request.BrandId,
                 UnitId = request.UnitId,
                 CreatedBy = request.CreatedBy,
-                ModifiedBy = request.ModifiedBy,
             };
             await _productsRepository.AddAsync(products);
             await _productsRepository.SaveChangesAsync();
@@ -131,7 +138,6 @@ namespace DairyFlow.Business.Providers
             products.CategoryId = request.CategoryId;
             products.BrandId = request.BrandId;
             products.UnitId = request.UnitId;
-            products.CreatedBy = request.CreatedBy;
             products.ModifiedBy = request.ModifiedBy;
             _productsRepository.Update(products);
             await _productsRepository.SaveChangesAsync();

@@ -16,7 +16,7 @@ namespace DairyFlow.Data.Dtos.ProductsDto
         public string? CreatedBy { get; set; }
         public string? ModifiedBy { get; set; }
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 20;
         public int PageCount { get; set; }
 
     }

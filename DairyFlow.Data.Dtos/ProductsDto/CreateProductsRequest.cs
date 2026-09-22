@@ -16,7 +16,6 @@ namespace DairyFlow.Data.Dtos.ProductsDto
         public int BrandId { get; set; }
         public int UnitId { get; set; }
         public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
 
     }
 }
