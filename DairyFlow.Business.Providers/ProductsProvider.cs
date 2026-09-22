@@ -33,7 +33,8 @@ namespace DairyFlow.Business.Providers
                          join category in _categoriesRepository.GetAll() on product.CategoryId equals category.Id
                          join brand in _brandsRepository.GetAll() on product.BrandId equals brand.Id
                          join createdUser in _usersRepository.GetAll() on product.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id into modifiedUsers 
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          join unit in _unitsRepository.GetAll() on product.UnitId equals unit.Id
                          where product.Id == id
                          select new ProductsResponse
@@ -42,12 +43,12 @@ namespace DairyFlow.Business.Providers
                              Name = product.Name,
                              CategoryId = product.CategoryId,
                              CategoryName = category.Name,
-                             BrandId = product.BrandId,                             
+                             BrandId = product.BrandId,
                              BrandName = brand.Name,
                              UnitId = product.UnitId,
                              UnitName = unit.Name,
                              CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
-                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedByName = modifiedUser == null ? null : $"{modifiedUser.FirstName} {modifiedUser.LastName}"
                          });
 
             var products = query.FirstOrDefault();
@@ -64,7 +65,8 @@ namespace DairyFlow.Business.Providers
                          join category in _categoriesRepository.GetAll() on product.CategoryId equals category.Id
                          join brand in _brandsRepository.GetAll() on product.BrandId equals brand.Id
                          join createdUser in _usersRepository.GetAll() on product.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on product.ModifiedBy equals modifiedUser.Id into modifiedUsers 
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          join unit in _unitsRepository.GetAll() on product.UnitId equals unit.Id
                          select new ProductsResponse
                          {
@@ -79,9 +81,9 @@ namespace DairyFlow.Business.Providers
                              CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedByFirstName = createdUser.FirstName,
                              CreatedByLastName = createdUser.LastName,
-                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
-                             ModifiedByFirstName = modifiedUser.FirstName,
-                             ModifiedByLastName = modifiedUser.LastName,
+                             ModifiedByName = modifiedUser == null ? null : $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedByFirstName = modifiedUser == null ? null : modifiedUser.FirstName,
+                             ModifiedByLastName = modifiedUser == null ? null : modifiedUser.LastName,
                          });
 
             if (filters.Id.HasValue)
@@ -104,10 +106,10 @@ namespace DairyFlow.Business.Providers
             {
                 query = query.Where(p => p.CreatedByFirstName!.Contains(filters.CreatedBy) || (p.CreatedByLastName != null && p.CreatedByLastName!.Contains(filters.CreatedBy)));
             }
-            if (!string.IsNullOrEmpty(filters.ModifiedBy))
-            {
-                query = query.Where(p => p.ModifiedByFirstName!.Contains(filters.ModifiedBy) || (p.ModifiedByLastName != null && p.ModifiedByLastName!.Contains(filters.ModifiedBy)));
-            }
+            //if (!string.IsNullOrEmpty(filters.ModifiedBy))
+            //{
+            //    query = query.Where(p => p.ModifiedByFirstName!.Contains(filters.ModifiedBy) || (p.ModifiedByLastName != null && p.ModifiedByLastName!.Contains(filters.ModifiedBy)));
+            //}
 
             query = query.OrderBy(p => p.Id);
 
@@ -153,7 +155,7 @@ namespace DairyFlow.Business.Providers
             _productsRepository.Delete(products);
             await _productsRepository.SaveChangesAsync();
             return id;
-        }   
+        }
 
 
     }
