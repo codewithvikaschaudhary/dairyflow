@@ -29,8 +29,12 @@ namespace DairyFlow.Data.Dtos.PurchaseItemDto
         public decimal TotalAmount { get; set; }
 
         public required string CreatedByName { get; set; }
-        
+
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
         public string? ModifiedByName { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
 
     }
 }

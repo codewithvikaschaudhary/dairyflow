@@ -10,8 +10,7 @@ namespace DairyFlow.Data.Dtos.CategoriesDto
     {
 
         public required string Name { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        public int? ModifiedBy { get; set; }
 
     }
 }

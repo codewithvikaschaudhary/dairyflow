@@ -17,7 +17,7 @@ namespace DairyFlow.Data.Dtos.UnitsDto
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public int? ModifiedBy { get; set; }
         public string? ModifiedByName { get; set; }
-        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDate { get; set; }
 
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DairyFlow.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UnitsController : Controller
     {
         private readonly ILogger<UnitsController> _logger;

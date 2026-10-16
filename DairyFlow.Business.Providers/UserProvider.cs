@@ -26,13 +26,20 @@ namespace DairyFlow.Business.Providers
         {
 
             var query = (from users in _userRepository.GetAll()
+                         join creator in _userRepository.GetAll() on users.CreatedBy equals creator.Id
+                         into creators from creator in creators.DefaultIfEmpty()
+                         join modifier in _userRepository.GetAll() on users.ModifiedBy equals modifier.Id
+                         into modifiers from modifier in modifiers.DefaultIfEmpty()
+
                          where users.Id == id
                          select new UsersResponse
                          {
                              Id = users.Id,
                              FirstName = users.FirstName,
                              LastName = users.LastName,
-                             CreatedAt = users.CreatedAt
+                             CreatedByname = $"{creator.FirstName} {creator.LastName}",
+                             CreatedAt = users.CreatedAt,
+                             ModifiedByName = users.ModifiedBy == null ? null : $"{modifier.FirstName} {modifier.LastName}",
                          });
             var usersResponse = query.FirstOrDefault();
             if (usersResponse == null)
@@ -45,15 +52,22 @@ namespace DairyFlow.Business.Providers
         public List<UsersResponse> GetAllUsers(UsersFilters filters)
         {
             var query =(from users in _userRepository.GetAll()
+                        join creator in _userRepository.GetAll() on users.CreatedBy equals creator.Id
+                        into creators from creator in creators.DefaultIfEmpty()
+                        join modifier in _userRepository.GetAll() on users.ModifiedBy equals modifier.Id
+                        into modifiers from modifier in modifiers.DefaultIfEmpty()
                         select new UsersResponse
                         {
                             Id = users.Id,
                             FirstName = users.FirstName,
                             LastName = users.LastName,
-                            CreatedAt = users.CreatedAt
+                            CreatedByname = $"{creator.FirstName} {creator.LastName}",
+                            CreatedAt = users.CreatedAt,
+                            ModifiedByName = users.ModifiedBy == null ? null : $"{modifier.FirstName} {modifier.LastName}",
+                            
                         });
-            
-           if (filters.Id.HasValue)
+
+            if (filters.Id.HasValue)
             {
                 query = query.Where(u => u.Id == filters.Id.Value);
             }
@@ -76,6 +90,7 @@ namespace DairyFlow.Business.Providers
                 {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                CreatedBy = request.CreatedBy
             };
 
             await _userRepository.AddAsync(user);
@@ -92,6 +107,7 @@ namespace DairyFlow.Business.Providers
             }
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
+            user.ModifiedBy = request.ModifiedBy;
             _userRepository.Update(user);
             await _userRepository.SaveChangesAsync();
             return user;

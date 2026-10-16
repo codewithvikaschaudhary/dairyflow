@@ -14,8 +14,8 @@ namespace DairyFlow.Data.Dtos.BrandsDto
         public required string Name { get; set; }
         public required string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public required string ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; } = DateTime.Now;
+        public string? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; } 
 
     }
 }

@@ -35,7 +35,9 @@ namespace DairyFlow.Business.Providers
                              Id = category.Id,
                              Name = category.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
+                             CreatedDate = category.CreatedDate,
                              ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedDate = category.ModifiedDate
                          });
             var categories = query.FirstOrDefault();
             if (categories == null)
@@ -55,7 +57,9 @@ namespace DairyFlow.Business.Providers
                              Id = category.Id,
                              Name = category.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
+                             CreatedDate = category.CreatedDate,
                              ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedDate = category.ModifiedDate   
                          });
 
 
@@ -86,7 +90,6 @@ namespace DairyFlow.Business.Providers
             {
                 Name = request.Name,
                 CreatedBy = request.CreatedBy,
-                ModifiedBy = request.ModifiedBy,
             };
 
             await _categoriesRepository.AddAsync(categories);
@@ -102,8 +105,8 @@ namespace DairyFlow.Business.Providers
                 throw new Exception($"Categories with ID {id} not found.");
             }
             categories.Name = request.Name;
-            categories.CreatedBy = request.CreatedBy;
             categories.ModifiedBy = request.ModifiedBy;
+            categories.ModifiedDate = DateTime.Now;
             _categoriesRepository.Update(categories);
             await _categoriesRepository.SaveChangesAsync();
             return categories;

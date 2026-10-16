@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DairyFlow.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : Controller
     {
         private readonly IUsersProvider _userProvider;

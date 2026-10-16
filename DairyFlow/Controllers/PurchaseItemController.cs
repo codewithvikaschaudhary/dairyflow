@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DairyFlow.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+
     public class PurchaseItemController : Controller
     {
         

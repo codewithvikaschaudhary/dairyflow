@@ -79,7 +79,8 @@ namespace DairyFlow.Business.Providers
                              TaxAmount = pi.TaxAmount,
                              TotalAmount = pi.TotalAmount,
                              CreatedByName = $"{crU.FirstName} {crU.LastName}",
-                             ModifiedByName = modifiedUser.Select(mu => $"{mu.FirstName} {mu.LastName}").FirstOrDefault()
+                             ModifiedByName = modifiedUser.Select(mu => $"{mu.FirstName} {mu.LastName}").FirstOrDefault(),
+                             ModifiedDate = pi.ModifiedDate
                          });
             if (filters.Id.HasValue)
             {

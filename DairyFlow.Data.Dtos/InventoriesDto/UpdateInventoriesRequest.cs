@@ -12,8 +12,7 @@ namespace DairyFlow.Data.Dtos.InventoriesDto
         public int ProductId { get; set; }
         public decimal CurrentStock { get; set; }
         public decimal MinimumStock { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        public int? ModifiedBy { get; set; }
 
     }
 }

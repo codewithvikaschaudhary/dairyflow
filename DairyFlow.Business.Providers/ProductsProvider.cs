@@ -48,7 +48,8 @@ namespace DairyFlow.Business.Providers
                              UnitId = product.UnitId,
                              UnitName = unit.Name,
                              CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
-                             ModifiedByName = modifiedUser == null ? null : $"{modifiedUser.FirstName} {modifiedUser.LastName}"
+                             ModifiedByName = modifiedUser == null ? null : $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedDate = product.ModifiedDate,
                          });
 
             var products = query.FirstOrDefault();
@@ -84,6 +85,7 @@ namespace DairyFlow.Business.Providers
                              ModifiedByName = modifiedUser == null ? null : $"{modifiedUser.FirstName} {modifiedUser.LastName}",
                              ModifiedByFirstName = modifiedUser == null ? null : modifiedUser.FirstName,
                              ModifiedByLastName = modifiedUser == null ? null : modifiedUser.LastName,
+                             ModifiedDate = product.ModifiedDate,
                          });
 
             if (filters.Id.HasValue)
@@ -141,6 +143,7 @@ namespace DairyFlow.Business.Providers
             products.BrandId = request.BrandId;
             products.UnitId = request.UnitId;
             products.ModifiedBy = request.ModifiedBy;
+            products.ModifiedDate = DateTime.Now;
             _productsRepository.Update(products);
             await _productsRepository.SaveChangesAsync();
             return products;

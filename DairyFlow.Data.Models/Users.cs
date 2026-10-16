@@ -13,11 +13,23 @@ namespace DairyFlow.Data.Models
     {
         [Column("id"), Key]
         public int Id { get; set; }
+
         [Column("first_name")]
         public required string FirstName { get; set; }
+
         [Column("last_name")]
         public required string LastName { get; set; }
+
+        [Column("created_by")]
+        public int CreatedBy { get; set; }
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        [Column("modified_by")]
+        public int? ModifiedBy { get; set; }
+
+        [Column("modified_at")]
+        public DateTime? ModifiedAt { get; set; }
     }
 }

@@ -36,9 +36,10 @@ namespace DairyFlow.Business.Providers
                              Name = unit.Name,
                              ShortName = unit.ShortName,
                              CreatedBy = unit.CreatedBy,
-                             CreatedByName = createdUser.FirstName,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              ModifiedBy = unit.ModifiedBy,
-                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null
+                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null,
+                             ModifiedDate = unit.ModifiedDate,
                          });
             var result = query.FirstOrDefault();
             if (result == null)
@@ -61,9 +62,10 @@ namespace DairyFlow.Business.Providers
                              Name = unit.Name,
                              ShortName = unit.ShortName,
                              CreatedBy = unit.CreatedBy,
-                             CreatedByName = createdUser.FirstName,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              ModifiedBy = unit.ModifiedBy,
-                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null
+                             ModifiedByName = modifiedUser != null ? modifiedUser.FirstName : null,
+                             ModifiedDate = unit.ModifiedDate,
                          });
 
             if (filters.Id.HasValue)

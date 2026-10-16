@@ -30,7 +30,8 @@ namespace DairyFlow.Business.Providers
             var query = (from purchase in _productRepository.GetAll()
                          join supplier in _suppliersRepository.GetAll() on purchase.SupplierId equals supplier.Id
                          join createdUser in _usersRepository.GetAll() on purchase.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on purchase.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on purchase.ModifiedBy equals modifiedUser.Id into modifiedUsers 
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          where purchase.Id == id
                          select new PurchasesResponse
                          {
@@ -49,7 +50,7 @@ namespace DairyFlow.Business.Providers
                              CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedDate = purchase.CreatedDate,
                              ModifiedBy = purchase.ModifiedBy,
-                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedByName = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null,
                              ModifiedDate = purchase.ModifiedDate
                          });
 
@@ -69,7 +70,8 @@ namespace DairyFlow.Business.Providers
             var query = (from purchase in _productRepository.GetAll()
                          join supplier in _suppliersRepository.GetAll() on purchase.SupplierId equals supplier.Id
                          join createdUser in _usersRepository.GetAll() on purchase.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on purchase.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on purchase.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new PurchasesResponse
                          {
                              Id = purchase.Id,
@@ -87,7 +89,7 @@ namespace DairyFlow.Business.Providers
                              CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedDate = purchase.CreatedDate,
                              ModifiedBy = purchase.ModifiedBy,
-                             ModifiedByName = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedByName = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null,
                              ModifiedDate = purchase.ModifiedDate
                          });
             if (filters.Id.HasValue)

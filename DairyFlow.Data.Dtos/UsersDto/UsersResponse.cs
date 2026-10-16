@@ -14,7 +14,10 @@ namespace DairyFlow.Data.Dtos.UsersDto
         public int Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
+        public required string CreatedByname { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public required string? ModifiedByName { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
     }
 }

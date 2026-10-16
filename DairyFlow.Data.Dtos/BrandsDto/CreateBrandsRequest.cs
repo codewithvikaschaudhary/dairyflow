@@ -12,7 +12,6 @@ namespace DairyFlow.Data.Dtos.BrandsDto
 
         public required string Name { get; set; }
         public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
 
     }
 }

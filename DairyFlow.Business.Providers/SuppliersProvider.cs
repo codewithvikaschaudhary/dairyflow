@@ -39,6 +39,7 @@ namespace DairyFlow.Business.Providers
                              CreatedByName = $"{createdByUser.FirstName} {createdByUser.LastName}",
                              ModifiedBy = supplier.ModifiedBy,
                              ModifiedByName = $"{modifiedByUser.FirstName} {modifiedByUser.LastName}",
+                             ModifiedDate = supplier.ModifiedDate,
                          });
 
 

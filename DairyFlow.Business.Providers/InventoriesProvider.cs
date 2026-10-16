@@ -37,6 +37,7 @@ namespace DairyFlow.Business.Providers
                             MinimumStock = inventory.MinimumStock,
                             CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                            ModifiedDate = inventory.ModifiedDate,
                         });
             var invResponse = data.FirstOrDefault();
             if (invResponse == null)
@@ -65,6 +66,7 @@ namespace DairyFlow.Business.Providers
                              StockStatus = inventory.CurrentStock == 0 ? "Out Of Stock" : inventory.CurrentStock <= inventory.MinimumStock ? "Low Stock" : "In Stock",
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedDate = inventory.ModifiedDate,
                          });
 
 
@@ -111,7 +113,6 @@ namespace DairyFlow.Business.Providers
                 CurrentStock = request.CurrentStock,
                 MinimumStock = request.MinimumStock,
                 CreatedBy = request.CreatedBy,
-                ModifiedBy = request.ModifiedBy,
             };
             await _inventoriesRepository.AddAsync(inventories);
             await _inventoriesRepository.SaveChangesAsync();
@@ -131,8 +132,8 @@ namespace DairyFlow.Business.Providers
             inventories.ProductId = request.ProductId;
             inventories.CurrentStock = request.CurrentStock;
             inventories.MinimumStock = request.MinimumStock;
-            inventories.CreatedBy = request.CreatedBy;
             inventories.ModifiedBy = request.ModifiedBy;
+            inventories.ModifiedDate = DateTime.Now;
             _inventoriesRepository.Update(inventories);
             await _inventoriesRepository.SaveChangesAsync();
             return inventories;

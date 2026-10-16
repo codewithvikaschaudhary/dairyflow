@@ -19,8 +19,8 @@ namespace DairyFlow.Data.Dtos.InventoriesDto
         public string? StockStatus { get; set; }
         public required string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public required string ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; } = DateTime.Now;
+        public string? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
     }
 }

@@ -30,6 +30,7 @@ namespace DairyFlow.Business.Providers
                              Name = brand.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedDate = brand.ModifiedDate,
                          });
             var brands = query.FirstOrDefault();
             if (brands == null)
@@ -50,6 +51,7 @@ namespace DairyFlow.Business.Providers
                              Name = brand.Name,
                              CreatedBy = $"{createdUser.FirstName}{createdUser.LastName}",
                              ModifiedBy = $"{modifiedUser.FirstName}{modifiedUser.LastName}",
+                             ModifiedDate = brand.ModifiedDate,
                          });
 
             if (filters.Id.HasValue)
@@ -64,9 +66,10 @@ namespace DairyFlow.Business.Providers
             {
                 query = query.Where(i => i.CreatedBy.Contains(filters.CreatedBy));
             }
+            // Fix for CS8602: Add null check for ModifiedBy before calling Contains
             if (!string.IsNullOrEmpty(filters.ModifiedBy))
             {
-                query = query.Where(i => i.ModifiedBy.Contains(filters.ModifiedBy));
+                query = query.Where(i => i.ModifiedBy != null && i.ModifiedBy.Contains(filters.ModifiedBy));
             }
 
             return query.GetPaginatorResult(filters.PageNumber, filters.PageSize);
@@ -78,7 +81,6 @@ namespace DairyFlow.Business.Providers
             {
                 Name = request.Name,
                 CreatedBy = request.CreatedBy,
-                ModifiedBy = request.ModifiedBy,
             };
             await _brandsRepository.AddAsync(brands);
             await _brandsRepository.SaveChangesAsync();
@@ -93,8 +95,8 @@ namespace DairyFlow.Business.Providers
                 throw new Exception($"Brands with ID {id} not found.");
             }
             brands.Name = request.Name;
-            brands.CreatedBy = request.CreatedBy;
             brands.ModifiedBy = request.ModifiedBy;
+            brands.ModifiedDate = DateTime.Now;
             _brandsRepository.Update(brands);
             await _brandsRepository.SaveChangesAsync();
             return brands;
