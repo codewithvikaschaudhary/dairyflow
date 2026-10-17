@@ -28,59 +28,61 @@ namespace DairyFlow.Business.Providers
 
         public PurchaseItemResponse GetPurchaseItemById(int id)
         {
-            var query = (from pi in _purchaseItemRepository.GetAll()
-                         join p in _purchasesRepository.GetAll() on pi.PurchaseId equals p.Id
-                         join pr in _productsRepository.GetAll() on pi.ProductId equals pr.Id
-                         join crU in _usersRepository.GetAll() on pi.CreatedBy equals crU.Id
-                         join mdU in _usersRepository.GetAll() on pi.ModifiedBy equals mdU.Id into modifiedUser
-                         where pi.Id == id
+            var query = (from purchaseItem in _purchaseItemRepository.GetAll()
+                        join purchase in _purchasesRepository.GetAll() on purchaseItem.PurchaseId equals purchase.Id
+                        join product in _productsRepository.GetAll() on purchaseItem.ProductId equals product.Id
+                        join createdUser in _usersRepository.GetAll() on purchaseItem.CreatedBy equals createdUser.Id
+                        join modifiedUser in _usersRepository.GetAll() on purchaseItem.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                        from modifiedUser in modifiedUsers.DefaultIfEmpty()
+                        where purchaseItem.Id == id
                          select new PurchaseItemResponse
                          {
-                             Id = pi.Id,
-                             PurchaseId = pi.PurchaseId,
-                             InvoiceNumber = p.InvoiceNumber,
-                             ProductId = pi.ProductId,
-                             ProductName = pr.Name,
-                             Quantity = pi.Quantity,
-                             UnitPrice = pi.UnitPrice,
-                             Discount = pi.Discount,
-                             TaxAmount = pi.TaxAmount,
-                             TotalAmount = pi.TotalAmount,
-                             CreatedByName = $"{crU.FirstName} {crU.LastName}",
-                             ModifiedByName = modifiedUser.Select(mu => $"{mu.FirstName} {mu.LastName}").FirstOrDefault()
+                             Id = purchaseItem.Id,
+                             PurchaseId = purchaseItem.PurchaseId,
+                             InvoiceNumber = purchase.InvoiceNumber,
+                             ProductId = purchaseItem.ProductId,
+                             ProductName = product.Name,
+                             Quantity = purchaseItem.Quantity,
+                             UnitPrice = purchaseItem.UnitPrice,
+                             Discount = purchaseItem.Discount,
+                             TaxAmount = purchaseItem.TaxAmount,
+                             TotalAmount = purchaseItem.TotalAmount,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
+                             ModifiedByName = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null
                          });
 
-            var purchaseItem = query.FirstOrDefault();
-            if (purchaseItem == null)
+            var purchaseItems = query.FirstOrDefault();
+            if (purchaseItems == null)
             {
                 throw new Exception($"PurchaseItem with Id {id} not found.");
             }
-            return purchaseItem;
+            return purchaseItems;
 
         }
 
         public List<PurchaseItemResponse> GetAllPurchaseItems(PurchaseItemFilters filters)
         {
-            var query = (from pi in _purchaseItemRepository.GetAll()
-                         join p in _purchasesRepository.GetAll() on pi.PurchaseId equals p.Id
-                         join pr in _productsRepository.GetAll() on pi.ProductId equals pr.Id
-                         join crU in _usersRepository.GetAll() on pi.CreatedBy equals crU.Id
-                         join mdU in _usersRepository.GetAll() on pi.ModifiedBy equals mdU.Id into modifiedUser
+            var query = (from purchaseItem in _purchaseItemRepository.GetAll()
+                         join purchase in _purchasesRepository.GetAll() on purchaseItem.PurchaseId equals purchase.Id
+                         join product in _productsRepository.GetAll() on purchaseItem.ProductId equals product.Id
+                         join createdUser in _usersRepository.GetAll() on purchaseItem.CreatedBy equals createdUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on purchaseItem.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new PurchaseItemResponse
                          {
-                             Id = pi.Id,
-                             PurchaseId = pi.PurchaseId,
-                             InvoiceNumber = p.InvoiceNumber,
-                             ProductId = pi.ProductId,
-                             ProductName = pr.Name,
-                             Quantity = pi.Quantity,
-                             UnitPrice = pi.UnitPrice,
-                             Discount = pi.Discount,
-                             TaxAmount = pi.TaxAmount,
-                             TotalAmount = pi.TotalAmount,
-                             CreatedByName = $"{crU.FirstName} {crU.LastName}",
-                             ModifiedByName = modifiedUser.Select(mu => $"{mu.FirstName} {mu.LastName}").FirstOrDefault(),
-                             ModifiedDate = pi.ModifiedDate
+                             Id = purchaseItem.Id,
+                             PurchaseId = purchaseItem.PurchaseId,
+                             InvoiceNumber = purchase.InvoiceNumber,
+                             ProductId = purchaseItem.ProductId,
+                             ProductName = product.Name,
+                             Quantity = purchaseItem.Quantity,
+                             UnitPrice = purchaseItem.UnitPrice,
+                             Discount = purchaseItem.Discount,
+                             TaxAmount = purchaseItem.TaxAmount,
+                             TotalAmount = purchaseItem.TotalAmount,
+                             CreatedByName = $"{createdUser.FirstName} {createdUser.LastName}",
+                             ModifiedByName = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null,
+                             ModifiedDate = purchaseItem.ModifiedDate
                          });
             if (filters.Id.HasValue)
             {

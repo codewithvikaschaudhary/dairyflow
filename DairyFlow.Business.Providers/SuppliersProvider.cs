@@ -26,7 +26,8 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from supplier in _suppliersRepository.GetAll()
                          join createdByUser in _usersRepository.GetAll() on supplier.CreatedBy equals createdByUser.Id
-                         join modifiedByUser in _usersRepository.GetAll() on supplier.ModifiedBy equals modifiedByUser.Id
+                         join modifiedByUser in _usersRepository.GetAll() on supplier.ModifiedBy equals modifiedByUser.Id into modifiedUsers
+                         from modifiedByUser in modifiedUsers.DefaultIfEmpty()
                          where supplier.Id == id
                          select new SuppliersResponse
                          {
@@ -38,7 +39,7 @@ namespace DairyFlow.Business.Providers
                              CreatedBy = supplier.CreatedBy,
                              CreatedByName = $"{createdByUser.FirstName} {createdByUser.LastName}",
                              ModifiedBy = supplier.ModifiedBy,
-                             ModifiedByName = $"{modifiedByUser.FirstName} {modifiedByUser.LastName}",
+                             ModifiedByName = modifiedByUser != null ? modifiedByUser.FirstName + " " + modifiedByUser.LastName : null,
                              ModifiedDate = supplier.ModifiedDate,
                          });
 
@@ -56,7 +57,8 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from supplier in _suppliersRepository.GetAll()
                          join createdByUser in _usersRepository.GetAll() on supplier.CreatedBy equals createdByUser.Id
-                         join modifiedByUser in _usersRepository.GetAll() on supplier.ModifiedBy equals modifiedByUser.Id
+                         join modifiedByUser in _usersRepository.GetAll() on supplier.ModifiedBy equals modifiedByUser.Id into modifiedUsers
+                         from modifiedByUser in modifiedUsers.DefaultIfEmpty()
                          select new SuppliersResponse
                          {
                              Id = supplier.Id,
@@ -68,7 +70,7 @@ namespace DairyFlow.Business.Providers
                              CreatedByName = $"{createdByUser.FirstName} {createdByUser.LastName}",
                              CreatedDate = supplier.CreatedDate,
                              ModifiedBy = supplier.ModifiedBy,
-                             ModifiedByName = $"{modifiedByUser.FirstName} {modifiedByUser.LastName}",
+                             ModifiedByName = modifiedByUser != null ? modifiedByUser.FirstName + " " + modifiedByUser.LastName : null,
                              ModifiedDate = supplier.ModifiedDate,
                          });
             if (filters.Id.HasValue)

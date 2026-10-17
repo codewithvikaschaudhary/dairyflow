@@ -22,14 +22,15 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from brand in _brandsRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on brand.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on brand.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on brand.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          where brand.Id == id
                          select new BrandsResponse
                          {
                              Id = brand.Id,
                              Name = brand.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedBy = modifiedUser != null ? modifiedUser.FirstName + " " + modifiedUser.LastName : null,
                              ModifiedDate = brand.ModifiedDate,
                          });
             var brands = query.FirstOrDefault();
@@ -44,13 +45,14 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from brand in _brandsRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on brand.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on brand.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on brand.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new BrandsResponse
                          {
                              Id = brand.Id,
                              Name = brand.Name,
                              CreatedBy = $"{createdUser.FirstName}{createdUser.LastName}",
-                             ModifiedBy = $"{modifiedUser.FirstName}{modifiedUser.LastName}",
+                             ModifiedBy = modifiedUser != null ? modifiedUser.FirstName + " " + modifiedUser.LastName : null,
                              ModifiedDate = brand.ModifiedDate,
                          });
 

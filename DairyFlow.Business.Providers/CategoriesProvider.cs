@@ -28,7 +28,8 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from category in _categoriesRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on category.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on category.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on category.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          where category.Id == id
                          select new CategoriesResponse
                          {
@@ -36,7 +37,7 @@ namespace DairyFlow.Business.Providers
                              Name = category.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedDate = category.CreatedDate,
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedBy = modifiedUser != null ? modifiedUser.FirstName + " " + modifiedUser.LastName : null,
                              ModifiedDate = category.ModifiedDate
                          });
             var categories = query.FirstOrDefault();
@@ -51,15 +52,16 @@ namespace DairyFlow.Business.Providers
         {
             var query = (from category in _categoriesRepository.GetAll()
                          join createdUser in _usersRepository.GetAll() on category.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on category.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on category.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new CategoriesResponse
                          {
                              Id = category.Id,
                              Name = category.Name,
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
                              CreatedDate = category.CreatedDate,
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
-                             ModifiedDate = category.ModifiedDate   
+                             ModifiedBy = modifiedUser != null ? modifiedUser.FirstName + " " + modifiedUser.LastName : null,
+                             ModifiedDate = category.ModifiedDate
                          });
 
 
@@ -70,13 +72,14 @@ namespace DairyFlow.Business.Providers
             if (!string.IsNullOrEmpty(filters.Name))
             {
                 query = query.Where(i => i.Name.Contains(filters.Name));
-            }if (!string.IsNullOrEmpty(filters.CreatedBy))
+            }
+            if (!string.IsNullOrEmpty(filters.CreatedBy))
             {
                 query = query.Where(i => i.CreatedBy.Contains(filters.CreatedBy));
             }
             if (!string.IsNullOrEmpty(filters.ModifiedBy))
             {
-                query = query.Where(i => i.ModifiedBy.Contains(filters.ModifiedBy));
+                query = query.Where(i => i.ModifiedBy != null && i.ModifiedBy.Contains(filters.ModifiedBy));
             }
 
 
