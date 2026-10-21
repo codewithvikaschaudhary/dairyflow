@@ -1,4 +1,4 @@
-﻿using DairyFlow.Business.Interfaces;
+using DairyFlow.Business.Interfaces;
 using DairyFlow.Data.Dtos.InventoriesDto;
 using DairyFlow.Data.Models;
 using DairyFlow.Data.Repository;
@@ -28,7 +28,7 @@ namespace DairyFlow.Business.Providers
                         join createdUser in _usersRepository.GetAll() on inventory.CreatedBy equals createdUser.Id
                         join modifiedUser in _usersRepository.GetAll() on inventory.ModifiedBy equals modifiedUser.Id into modifiedUsers
                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
-                        where inventory.ProductId == id
+                        where inventory.Id == id
                         select new InventoriesResponse
                         {
                             Id = inventory.Id,
