@@ -99,7 +99,7 @@ namespace DairyFlow.Business.Providers
             }
             if (!string.IsNullOrEmpty(filters.ModifiedBy))
             {
-                query = query.Where(i => i.ModifiedBy.Contains(filters.ModifiedBy));
+                query = query.Where(i => i.ModifiedBy != null && i.ModifiedBy.Contains(filters.ModifiedBy));
             }
 
             return query.GetPaginatorResult(filters.PageNumber, filters.PageSize);
