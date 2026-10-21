@@ -26,7 +26,8 @@ namespace DairyFlow.Business.Providers
             var data = (from inventory in _inventoriesRepository.GetAll()
                         join product in _productsRepository.GetAll() on inventory.ProductId equals product.Id
                         join createdUser in _usersRepository.GetAll() on inventory.CreatedBy equals createdUser.Id
-                        join modifiedUser in _usersRepository.GetAll() on inventory.ModifiedBy equals modifiedUser.Id
+                        join modifiedUser in _usersRepository.GetAll() on inventory.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                        from modifiedUser in modifiedUsers.DefaultIfEmpty()
                         where inventory.ProductId == id
                         select new InventoriesResponse
                         {
@@ -35,8 +36,9 @@ namespace DairyFlow.Business.Providers
                             ProductName = product.Name,
                             CurrentStock = inventory.CurrentStock,
                             MinimumStock = inventory.MinimumStock,
+                            StockStatus = inventory.CurrentStock == 0 ? "Out Of Stock" : inventory.CurrentStock <= inventory.MinimumStock ? "Low Stock" : "In Stock",
                             CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
-                            ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                            ModifiedBy = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null,
                             ModifiedDate = inventory.ModifiedDate,
                         });
             var invResponse = data.FirstOrDefault();
@@ -55,7 +57,8 @@ namespace DairyFlow.Business.Providers
             var query = (from inventory in _inventoriesRepository.GetAll()
                          join product in _productsRepository.GetAll() on inventory.ProductId equals product.Id
                          join createdUser in _usersRepository.GetAll() on inventory.CreatedBy equals createdUser.Id
-                         join modifiedUser in _usersRepository.GetAll() on inventory.ModifiedBy equals modifiedUser.Id
+                         join modifiedUser in _usersRepository.GetAll() on inventory.ModifiedBy equals modifiedUser.Id into modifiedUsers
+                         from modifiedUser in modifiedUsers.DefaultIfEmpty()
                          select new InventoriesResponse
                          {
                              Id = inventory.Id,
@@ -65,7 +68,7 @@ namespace DairyFlow.Business.Providers
                              MinimumStock = inventory.MinimumStock,
                              StockStatus = inventory.CurrentStock == 0 ? "Out Of Stock" : inventory.CurrentStock <= inventory.MinimumStock ? "Low Stock" : "In Stock",
                              CreatedBy = $"{createdUser.FirstName} {createdUser.LastName}",
-                             ModifiedBy = $"{modifiedUser.FirstName} {modifiedUser.LastName}",
+                             ModifiedBy = modifiedUser != null ? $"{modifiedUser.FirstName} {modifiedUser.LastName}" : null,
                              ModifiedDate = inventory.ModifiedDate,
                          });
 

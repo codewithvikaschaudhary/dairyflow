@@ -37,9 +37,9 @@ namespace DairyFlow.Business.Providers
                              Id = users.Id,
                              FirstName = users.FirstName,
                              LastName = users.LastName,
-                             CreatedByname = $"{creator.FirstName} {creator.LastName}",
+                             CreatedByname = creator != null ? $"{creator.FirstName} {creator.LastName}" : null,
                              CreatedAt = users.CreatedAt,
-                             ModifiedByName = users.ModifiedBy == null ? null : $"{modifier.FirstName} {modifier.LastName}",
+                             ModifiedByName = modifier != null ? $"{modifier.FirstName} {modifier.LastName}" : null,
                          });
             var usersResponse = query.FirstOrDefault();
             if (usersResponse == null)
@@ -48,7 +48,7 @@ namespace DairyFlow.Business.Providers
             }
             return usersResponse;
         }
-
+        
         public List<UsersResponse> GetAllUsers(UsersFilters filters)
         {
             var query =(from users in _userRepository.GetAll()
