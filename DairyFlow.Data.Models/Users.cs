@@ -18,7 +18,7 @@ namespace DairyFlow.Data.Models
         public required string FirstName { get; set; }
 
         [Column("last_name")]
-        public required string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Column("created_by")]
         public int CreatedBy { get; set; }

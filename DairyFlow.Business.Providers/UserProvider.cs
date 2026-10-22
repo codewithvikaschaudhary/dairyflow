@@ -39,6 +39,7 @@ namespace DairyFlow.Business.Providers
                              CreatedByname = $"{creator.FirstName} {creator.LastName}",
                              CreatedAt = users.CreatedAt,
                              ModifiedByName = modifier != null ? $"{modifier.FirstName} {modifier.LastName}" : null,
+                             ModifiedAt = users.ModifiedAt
                          });
             var usersResponse = query.FirstOrDefault();
             if (usersResponse == null)
@@ -62,7 +63,7 @@ namespace DairyFlow.Business.Providers
                             CreatedByname = $"{creator.FirstName} {creator.LastName}",
                             CreatedAt = users.CreatedAt,
                             ModifiedByName = modifier != null ? $"{modifier.FirstName} {modifier.LastName}" : null,
-
+                            ModifiedAt = users.ModifiedAt
                         });
 
             if (filters.Id.HasValue)
@@ -106,6 +107,7 @@ namespace DairyFlow.Business.Providers
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.ModifiedBy = request.ModifiedBy;
+            user.ModifiedAt = DateTime.Now;
             _userRepository.Update(user);
             await _userRepository.SaveChangesAsync();
             return user;
