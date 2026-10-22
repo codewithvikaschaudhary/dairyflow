@@ -27,7 +27,6 @@ namespace DairyFlow.Business.Providers
 
             var query = (from users in _userRepository.GetAll()
                          join creator in _userRepository.GetAll() on users.CreatedBy equals creator.Id
-                         into creators from creator in creators.DefaultIfEmpty()
                          join modifier in _userRepository.GetAll() on users.ModifiedBy equals modifier.Id
                          into modifiers from modifier in modifiers.DefaultIfEmpty()
 
@@ -37,7 +36,7 @@ namespace DairyFlow.Business.Providers
                              Id = users.Id,
                              FirstName = users.FirstName,
                              LastName = users.LastName,
-                             CreatedByname = creator != null ? $"{creator.FirstName} {creator.LastName}" : null,
+                             CreatedByname = $"{creator.FirstName} {creator.LastName}",
                              CreatedAt = users.CreatedAt,
                              ModifiedByName = modifier != null ? $"{modifier.FirstName} {modifier.LastName}" : null,
                          });
@@ -53,7 +52,6 @@ namespace DairyFlow.Business.Providers
         {
             var query =(from users in _userRepository.GetAll()
                         join creator in _userRepository.GetAll() on users.CreatedBy equals creator.Id
-                        into creators from creator in creators.DefaultIfEmpty()
                         join modifier in _userRepository.GetAll() on users.ModifiedBy equals modifier.Id
                         into modifiers from modifier in modifiers.DefaultIfEmpty()
                         select new UsersResponse
@@ -63,8 +61,8 @@ namespace DairyFlow.Business.Providers
                             LastName = users.LastName,
                             CreatedByname = $"{creator.FirstName} {creator.LastName}",
                             CreatedAt = users.CreatedAt,
-                            ModifiedByName = users.ModifiedBy == null ? null : $"{modifier.FirstName} {modifier.LastName}",
-                            
+                            ModifiedByName = modifier != null ? $"{modifier.FirstName} {modifier.LastName}" : null,
+
                         });
 
             if (filters.Id.HasValue)
